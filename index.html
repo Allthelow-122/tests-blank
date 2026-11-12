@@ -738,45 +738,36 @@
     <div id="dynamicWallpaperLayer"></div>
     <div class="renaissance-halftone-overlay"></div>
 
-    <!-- 2. RENAISSANCE MULTIMEDIA INTRO OVERLAY (AUTO-LOADS ./intro.mp4 IF PRESENT) -->
-    <div id="renaissanceIntroModal">
-        <video id="introCustomVideo" class="absolute inset-0 w-full h-full object-cover opacity-55 hidden" playsinline muted loop></video>
-        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/90 pointer-events-none"></div>
+    <!-- 2. RENAISSANCE MULTIMEDIA INTRO OVERLAY (AUTO-TRANSICIÓN AL TERMINAR) -->
+    <div id="renaissanceIntroModal" onclick="unlockIntroAudio()">
+        <video id="introCustomVideo" 
+               class="absolute inset-0 w-full h-full object-cover" 
+               autoplay 
+               muted 
+               playsinline 
+               preload="auto">
+            <source src="./intro.mp4" type="video/mp4">
+            <source src="./Intro.mp4" type="video/mp4">
+            <source src="./intro.webm" type="video/webm">
+        </video>
 
-        <div class="relative z-10 max-w-xl w-full px-6 text-center flex flex-col items-center">
-            <!-- Top Quote from Reference -->
-            <div class="flex items-center space-x-3 font-mono text-[10px] tracking-[0.28em] uppercase text-grimoire-parchment/80 mb-6">
-                <span>✦</span>
-                <span>IF NO ONE CHOOSES YOU, CHOOSE YOURSELF</span>
-                <span>✦</span>
-            </div>
-
-            <!-- Glowing Crown of Thorns Halo SVG -->
+        <!-- Emblema de respaldo (solo se muestra si no existe intro.mp4 en el repo) -->
+        <div id="introFallbackGraphic" class="hidden relative z-10 max-w-xl w-full px-6 text-center flex-col items-center pointer-events-none">
             <svg class="w-48 h-16 crown-halo-svg mb-4" viewBox="0 0 240 70" fill="none">
                 <ellipse cx="120" cy="35" rx="92" ry="18" stroke="#ffffff" stroke-width="2.2" stroke-dasharray="10 4"/>
                 <ellipse cx="120" cy="35" rx="102" ry="22" stroke="#dcd2c0" stroke-width="0.9" stroke-opacity="0.7"/>
-                <path d="M40 35 L25 28 M70 20 L62 8 M120 15 L120 2 M170 20 L178 8 M200 35 L215 28 M75 50 L65 62 M120 54 L120 67 M165 50 L175 62" stroke="#ffffff" stroke-width="1.5"/>
             </svg>
-
-            <h1 class="silent-authority-title text-4xl sm:text-6xl font-bold uppercase tracking-widest mb-2">
+            <h1 class="silent-authority-title text-5xl sm:text-7xl font-bold uppercase tracking-widest mb-2">
                 BLANK
             </h1>
-            <p class="font-mono text-[11px] tracking-[0.35em] uppercase text-grimoire-gold mb-8">
-                SILENT AUTHORITY // EST. THROUGH FIRE
+            <p class="font-mono text-[11px] tracking-[0.35em] uppercase text-grimoire-gold">
+                SILENT AUTHORITY
             </p>
+        </div>
 
-            <div class="flex flex-wrap items-center justify-center gap-3 font-mono text-xs">
-                <button onclick="enterGrimoireExperience()" class="px-7 py-3 bg-grimoire-parchment text-black font-bold uppercase tracking-[0.2em] hover:bg-grimoire-crimson hover:text-white transition-all shadow-[0_0_30px_rgba(255,255,255,0.4)]">
-                    ✦ ENTRAR AL SANTUARIO ✦
-                </button>
-                <button onclick="toggleIntroSound()" id="introSoundBtn" class="hidden px-4 py-3 border border-grimoire-parchment/40 text-grimoire-parchment hover:border-white text-[10px] uppercase tracking-widest">
-                    <i class="fa-solid fa-volume-xmark mr-1"></i> AUDIO
-                </button>
-            </div>
-
-            <div class="mt-8 font-mono text-[9px] tracking-[0.25em] opacity-50 uppercase">
-                
-            </div>
+        <!-- Indicador sutil de audio en la esquina inferior (los navegadores exigen 1 clic para desmutear autoplay) -->
+        <div id="introAudioHint" class="absolute bottom-6 right-6 z-20 font-mono text-[10px] tracking-[0.25em] uppercase text-white/60 bg-black/50 px-3 py-1.5 border border-white/20 backdrop-blur-sm pointer-events-none transition-opacity duration-500">
+            <i class="fa-solid fa-volume-xmark mr-1.5"></i> CLIC EN PANTALLA PARA SONIDO
         </div>
     </div>
 
@@ -1187,7 +1178,7 @@
                 <div class="max-w-xl mx-auto px-6 text-center flex flex-col items-center reveal-block">
                     <div class="w-px h-24 bg-gradient-to-b from-transparent via-white/70 to-white mb-6"></div>
                     <span class="font-mono text-[10px] tracking-[0.4em] uppercase text-white/60 mb-2">
-                        [ CÁMARA DE TRANSICIÓN // SILENCIO TÁCTICO ]
+                        
                     </span>
                     <p class="font-editorial italic text-xl sm:text-2xl text-white/85">
                         "En la penumbra se forjan los nombres que dominan el escenario."
@@ -2826,15 +2817,14 @@
             }, 3800);
         }
 
-        // =========================================================
-        // 1. AUTO-DETECT GITHUB WALLPAPER & INTRO MULTIMEDIA
+       // =========================================================
+        // 1. AUTO-DETECT GITHUB WALLPAPER & AUTO-END INTRO VIDEO
         // =========================================================
         function initDynamicWallpaperAndIntro() {
             const savedCustomWp = localStorage.getItem('blank_custom_wallpaper');
             if (savedCustomWp) {
                 setWallpaperCssUrl(savedCustomWp);
             } else {
-                // Probe if ./wallpaper.jpg or ./wallpaper.png exists in the GitHub repository
                 probeImageExists('./wallpaper.jpg', (existsJpg) => {
                     if (existsJpg) {
                         setWallpaperCssUrl('./wallpaper.jpg?t=' + Date.now());
@@ -2850,20 +2840,86 @@
                 });
             }
 
-            // Probe if ./intro.mp4 or ./intro.webm exists in the GitHub repository
             const introVid = document.getElementById('introCustomVideo');
-            const soundBtn = document.getElementById('introSoundBtn');
+            const fallbackGraphic = document.getElementById('introFallbackGraphic');
+            const audioHint = document.getElementById('introAudioHint');
+
             if (introVid) {
-                fetch('./intro.mp4', { method: 'HEAD' })
-                    .then(res => {
-                        if (res.ok) {
-                            introVid.src = './intro.mp4';
-                            introVid.classList.remove('hidden');
-                            if (soundBtn) soundBtn.classList.remove('hidden');
-                            introVid.play().catch(() => {});
-                        }
-                    })
-                    .catch(() => {});
+                introVid.muted = true;
+
+                // 1. En cuanto el video termina, entra automáticamente a la página
+                introVid.onended = () => {
+                    enterGrimoireExperience();
+                };
+
+                // 2. Si el archivo intro.mp4 aún no está subido o falla al cargar, muestra el emblema 3.2s y entra solo
+                introVid.onerror = () => {
+                    introVid.classList.add('hidden');
+                    if (audioHint) audioHint.classList.add('hidden');
+                    if (fallbackGraphic) {
+                        fallbackGraphic.classList.remove('hidden');
+                        fallbackGraphic.classList.add('flex');
+                    }
+                    setTimeout(() => {
+                        enterGrimoireExperience();
+                    }, 3200);
+                };
+
+                // Verificar si el source último falla (para disparar el fallback en caso de 404)
+                const sources = introVid.querySelectorAll('source');
+                if (sources.length > 0) {
+                    sources[sources.length - 1].addEventListener('error', () => {
+                        introVid.onerror();
+                    });
+                }
+
+                // 3. Iniciar reproducción automática
+                const playPromise = introVid.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        // Si el navegador bloquea el autoplay por ahorro de batería, entra tras 3.2s
+                        setTimeout(() => enterGrimoireExperience(), 3200);
+                    });
+                }
+            }
+        }
+
+        // Permite activar el audio haciendo clic en cualquier parte durante la intro
+        function unlockIntroAudio() {
+            const vid = document.getElementById('introCustomVideo');
+            const hint = document.getElementById('introAudioHint');
+            if (vid && vid.muted) {
+                vid.muted = false;
+                if (hint) {
+                    hint.innerHTML = '<i class="fa-solid fa-volume-high mr-1.5"></i> AUDIO ACTIVO';
+                    setTimeout(() => { hint.style.opacity = '0'; }, 1200);
+                }
+            }
+        }
+
+        function enterGrimoireExperience() {
+            const modal = document.getElementById('renaissanceIntroModal');
+            const vid = document.getElementById('introCustomVideo');
+            if (modal) modal.classList.add('intro-hidden');
+            if (vid) vid.pause();
+        }
+
+        function replayIntroModal() {
+            const modal = document.getElementById('renaissanceIntroModal');
+            const vid = document.getElementById('introCustomVideo');
+            const hint = document.getElementById('introAudioHint');
+            if (modal) modal.classList.remove('intro-hidden');
+            if (hint) {
+                hint.style.opacity = '1';
+                hint.innerHTML = '<i class="fa-solid fa-volume-high mr-1.5"></i> AUDIO ACTIVO';
+            }
+            if (vid) {
+                vid.currentTime = 0;
+                vid.muted = false;
+                vid.play().catch(() => {
+                    vid.muted = true;
+                    vid.play().catch(() => {});
+                });
             }
         }
 
@@ -4058,10 +4114,6 @@ async function processPlayer(p) {
         // --- INICIALIZACIÓN AUTOMÁTICA AL ABRIR LA WEB ---
         window.onload = function() {
             initDynamicWallpaperAndIntro();
-            if (sessionStorage.getItem('blank_intro_seen') === 'true') {
-                const introModal = document.getElementById('renaissanceIntroModal');
-                if (introModal) introModal.classList.add('intro-hidden');
-            }
             switchTab('inicio');
             initScrollReveal();
             loadGithubRankingData();
