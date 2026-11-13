@@ -2930,22 +2930,49 @@
             document.getElementById('fontModeLabel').innerText = nextFont.label;
         }
 
-        // --- THEME TOGGLE ---
-        function toggleTheme() {
-            isLightMode = !isLightMode;
+        // --- THEME TOGGLE (INICIO SIEMPRE OSCURO / SUBPÁGINAS CON MODO CLARO) ---
+        function applyEffectiveTheme() {
             const body = document.body;
             const icon = document.getElementById('themeIcon');
             const text = document.getElementById('themeText');
+            const themeBtn = document.getElementById('themeToggleBtn');
 
+            // Si estamos en 'inicio', forzamos siempre el modo oscuro
+            if (currentTab === 'inicio') {
+                body.classList.remove('light-theme');
+                if (themeBtn) {
+                    themeBtn.classList.add('opacity-40', 'cursor-not-allowed');
+                    themeBtn.title = 'El Inicio permanece siempre en Modo Oscuro (Cambia de pestaña para usar Modo Pergamino)';
+                }
+            } else {
+                if (themeBtn) {
+                    themeBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                    themeBtn.title = 'Alternar Modo Oscuro / Pergamino';
+                }
+                if (isLightMode) {
+                    body.classList.add('light-theme');
+                } else {
+                    body.classList.remove('light-theme');
+                }
+            }
+
+            // Actualizar icono y texto del botón según la preferencia guardada
             if (isLightMode) {
-                body.classList.add('light-theme');
-                icon.className = 'fa-solid fa-moon';
+                if (icon) icon.className = 'fa-solid fa-moon';
                 if (text) text.innerText = 'OSCURO';
             } else {
-                body.classList.remove('light-theme');
-                icon.className = 'fa-solid fa-sun';
+                if (icon) icon.className = 'fa-solid fa-sun';
                 if (text) text.innerText = 'PERGAMINO';
             }
+        }
+
+        function toggleTheme() {
+            if (currentTab === 'inicio') {
+                showToast('EL INICIO ES EXCLUSIVAMENTE OSCURO (DISPONIBLE EN SUBPÁGINAS)');
+                return;
+            }
+            isLightMode = !isLightMode;
+            applyEffectiveTheme();
         }
 
         // =========================================================
@@ -3076,10 +3103,14 @@
 
                 if (tab === 'gallery') renderGallery();
                 if (tab === 'ranking') renderLeaderboard();
+                
+                // Aplica el modo oscuro forzado en Inicio o el modo elegido en subpáginas
+                applyEffectiveTheme();
+
                 if (!skipScrollTop) {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-                
+
                 const sidebar = document.getElementById('leftIndexSidebar');
                 if (sidebar) sidebar.classList.remove('mobile-open');
 
