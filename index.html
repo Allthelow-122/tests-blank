@@ -201,6 +201,40 @@
                 transform: translate(0, -50%);
             }
         }
+        /* =========================================================
+           FIXED RIGHT RENAISSANCE WAR ROOM PANEL (MISMOS BORDES QUE EL ÍNDICE)
+           ========================================================= */
+        .renaissance-right-index {
+            position: fixed;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 60;
+            width: 195px;
+            background: rgba(7, 7, 9, 0.82);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(242, 236, 228, 0.45);
+            border-top: 1px solid rgba(242, 236, 228, 0.2);
+            border-bottom: 1px solid rgba(242, 236, 228, 0.2);
+            border-left: 1px solid rgba(242, 236, 228, 0.12);
+            padding: 1.1rem 0.95rem;
+            transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+        }
+
+        body.light-theme .renaissance-right-index {
+            background: rgba(232, 226, 213, 0.92);
+            border-color: rgba(18, 16, 16, 0.35);
+        }
+
+        @media (max-width: 1150px) {
+            .renaissance-right-index {
+                transform: translate(115%, -50%);
+            }
+            .renaissance-right-index.mobile-open {
+                transform: translate(0, -50%);
+            }
+        }
 
         .index-nav-link {
             display: flex;
@@ -226,6 +260,7 @@
             background: rgba(242, 236, 228, 0.07);
             text-shadow: 0 0 10px rgba(242, 236, 228, 0.55);
         }
+        
 
         /* =========================================================
            POSTER SILENT AUTHORITY TYPOGRAPHY & HALO GLOW
@@ -769,6 +804,7 @@
     </div>
 
     <!-- 4. FIXED LEFT RENAISSANCE INDEX SIDEBAR (SCROLL INDEX + SUBPAGES) -->
+
     <aside id="leftIndexSidebar" class="renaissance-left-index">
         <!-- Ornate Top Cross -->
         <div class="flex items-center justify-between border-b border-grimoire-parchment/25 pb-2.5 mb-3 font-mono text-[10px]">
@@ -849,6 +885,64 @@
     <button onclick="document.getElementById('leftIndexSidebar').classList.toggle('mobile-open')" class="fixed bottom-6 left-6 z-50 xl:hidden px-3.5 py-2.5 bg-black/90 border border-grimoire-parchment text-grimoire-parchment font-mono text-[10px] uppercase tracking-widest shadow-2xl">
         ✥ ÍNDICE
     </button>
+    
+    <!-- 5. FIXED RIGHT RENAISSANCE WAR ROOM SIDEBAR (ESTILO ÍNDICE) -->
+    <aside id="rightDrafterSidebar" class="renaissance-right-index">
+        <!-- Ornate Top Cross -->
+        <div class="flex items-center justify-between border-b border-grimoire-parchment/25 pb-2.5 mb-3 font-mono text-[10px]">
+            <span class="opacity-60">[WAR ROOM]</span>
+            <span class="tracking-[0.22em] font-bold text-grimoire-parchment">TÁCTICA ✥</span>
+        </div>
+
+        <!-- SECCIÓN PRINCIPAL: ACCESO AL DRAFTER -->
+        <div class="mb-4">
+            <div class="font-mono text-[9px] tracking-[0.22em] uppercase text-grimoire-gold/75 mb-1.5 px-1 text-right">
+                I. SIMULADOR OFICIAL
+            </div>
+            <div class="space-y-1">
+                <button onclick="switchTab('drafter')" id="side-nav-drafter" class="index-nav-link">
+                    <span>✦ DRAFTER.LOL</span>
+                    <span>→</span>
+                </button>
+                <button onclick="switchTab('drafter'); setTimeout(() => document.getElementById('scrimVaultContainer')?.scrollIntoView({behavior:'smooth'}), 260);" class="index-nav-link">
+                    <span>BÓVEDA SCRIMS</span>
+                    <span>✦</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- SECCIÓN RÁPIDA: PRE-CARGAR ESCUADRA EN BLUE SIDE -->
+        <div class="pt-3 border-t border-grimoire-parchment/20">
+            <div class="font-mono text-[9px] tracking-[0.22em] uppercase text-grimoire-gold/75 mb-1.5 px-1 text-right">
+                II. DRAFTEAR CON:
+            </div>
+            <div class="space-y-0.5">
+                <button onclick="openDrafterForSquad('BLANK Eclipsed')" class="index-nav-link">
+                    <span>01. ECLIPSED</span>
+                    <span>⚔</span>
+                </button>
+                <button onclick="openDrafterForSquad('BLANK Kore')" class="index-nav-link">
+                    <span>02. KORE</span>
+                    <span>⚔</span>
+                </button>
+                <button onclick="openDrafterForSquad('Last Knights Academy')" class="index-nav-link">
+                    <span>03. LAST KNIGHTS</span>
+                    <span>⚔</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Barcode Detail (Idéntico al Índice Izquierdo) -->
+        <div class="mt-4 pt-2.5 border-t border-grimoire-parchment/20 flex items-center justify-between opacity-75">
+            <span class="font-mono text-[8px] tracking-widest">FEARLESS</span>
+            <div class="h-3.5 w-20 bg-[repeating-linear-gradient(90deg,#f2ece4,#f2ece4_2px,transparent_2px,transparent_4px,#f2ece4_4px,#f2ece4_5px,transparent_5px,transparent_8px)]"></div>
+        </div>
+    </aside>
+
+    <!-- Botón flotante en móvil para abrir el panel derecho -->
+    <button onclick="document.getElementById('rightDrafterSidebar').classList.toggle('mobile-open')" class="fixed bottom-6 right-6 z-50 xl:hidden px-3.5 py-2.5 bg-black/90 border border-grimoire-parchment text-grimoire-parchment font-mono text-[10px] uppercase tracking-widest shadow-2xl">
+        DRAFTER ✥
+    </button>
 
     <!-- ========================================================= -->
     <!-- NAVIGATION HEADER                                         -->
@@ -921,7 +1015,7 @@
         <span id="grimoireToastText">SINCRONIZACIÓN COMPLETADA</span>
     </div>
 <!-- MAIN CONTENT CONTAINER (CONTINUACIÓN EXACTA DE INDEX PRUEBA.HTML) -->
-    <main class="pt-16 min-h-screen relative z-10 xl:pl-52">
+    <main class="pt-16 min-h-screen relative z-10 xl:px-56">
 
         <!-- ========================================================= -->
         <!-- TAB 1: INICIO (PÓSTER RENACENTISTA + MONOLITO + ROSTERS)  -->
@@ -2474,6 +2568,232 @@
 
             </div>
         </div>
+<!-- ========================================================= -->
+        <!-- TAB 7 (OCULTA EN HEADER): DRAFTER & BÓVEDA DE SCRIMS      -->
+        <!-- ========================================================= -->
+        <div id="tab-drafter-content" class="hidden py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 font-mono">
+
+                <!-- TOP BAR DEL DRAFTER -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end border-b border-white/35 pb-5 mb-6 gap-4">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                            <span class="grimoire-tag">[CÁMARA DE ESTRATEGIA // WAR ROOM]</span>
+                            <span class="crimson-tag">FEARLESS DRAFT • BO1 / BO3 / BO5</span>
+                            <button onclick="switchTab('inicio')" class="obsidian-tag hover:bg-white hover:text-black transition-colors cursor-pointer">
+                                ← VOLVER AL INICIO
+                            </button>
+                        </div>
+                        <h1 class="silent-authority-title text-3xl sm:text-5xl font-bold uppercase tracking-tight">
+                            BLANK // TACTICAL DRAFTER
+                        </h1>
+                    </div>
+
+                    <!-- CONTROLES DE SERIE Y FEARLESS -->
+                    <div class="flex flex-wrap items-center gap-2.5 text-xs">
+                        <div class="flex items-center border border-white/30 bg-black/70 px-3 py-1.5 space-x-2">
+                            <span class="text-[10px] opacity-75 uppercase">SERIE:</span>
+                            <button onclick="setDraftGameNumber(1)" id="draft-g1" class="px-2 py-0.5 bg-white text-black font-bold">G1</button>
+                            <button onclick="setDraftGameNumber(2)" id="draft-g2" class="px-2 py-0.5 hover:bg-white/20">G2</button>
+                            <button onclick="setDraftGameNumber(3)" id="draft-g3" class="px-2 py-0.5 hover:bg-white/20">G3</button>
+                            <button onclick="setDraftGameNumber(4)" id="draft-g4" class="px-2 py-0.5 hover:bg-white/20">G4</button>
+                            <button onclick="setDraftGameNumber(5)" id="draft-g5" class="px-2 py-0.5 hover:bg-white/20">G5</button>
+                        </div>
+
+                        <button onclick="toggleFearlessMode()" id="fearlessToggleBtn" class="px-3.5 py-2 border border-white/50 bg-grimoire-crimson text-white font-bold uppercase text-[11px] tracking-wider flex items-center space-x-2">
+                            <span>✦ FEARLESS: ON</span>
+                        </button>
+
+                        <button onclick="undoLastDraftAction()" title="Deshacer último turno" class="px-3 py-2 border border-white/40 hover:bg-white hover:text-black transition-all font-bold uppercase text-[11px]">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> UNDO
+                        </button>
+
+                        <button onclick="resetCurrentGameDraft()" class="px-3 py-2 border border-white/40 hover:bg-white hover:text-black transition-all font-bold uppercase text-[11px]">
+                            <i class="fa-solid fa-arrows-rotate mr-1"></i> RESET MAPA
+                        </button>
+
+                        <button onclick="clearFearlessPool()" title="Limpiar campeones usados en juegos anteriores" class="px-3 py-2 border border-grimoire-crimsonBright/60 text-grimoire-crimsonBright hover:bg-grimoire-crimsonBright hover:text-white transition-all font-bold uppercase text-[11px]">
+                            LIMPIAR SERIE
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CONFIGURACIÓN RÁPIDA DE ESCUADRAS Y LADOS -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6 items-center tarot-card p-4">
+                    <div class="md:col-span-4 flex items-center space-x-3">
+                        <span class="px-2.5 py-1 bg-sky-900/90 border border-sky-400 text-sky-200 font-bold text-[10px] uppercase tracking-widest shrink-0">BLUE SIDE</span>
+                        <input type="text" id="blueTeamNameInput" value="BLANK ECLIPSED" oninput="updateDraftHeaders()" class="grimoire-input text-xs py-1.5 font-bold uppercase">
+                    </div>
+
+                    <div class="md:col-span-4 text-center flex flex-col items-center justify-center">
+                        <div id="draftPhaseBanner" class="px-4 py-1.5 bg-white text-black font-bold text-xs uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+                            TURNO 01/20 // BLUE BAN 1
+                        </div>
+                        <div class="mt-1.5 flex items-center space-x-3 text-[10px] opacity-80">
+                            <button onclick="swapDraftSides()" class="underline hover:text-white">⇄ INTERCAMBIAR LADOS</button>
+                            <span>•</span>
+                            <span id="fearlessCounterText">FEARLESS BLOQUEADOS: 0</span>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-4 flex items-center space-x-3">
+                        <input type="text" id="redTeamNameInput" value="RIVAL SCRIM" oninput="updateDraftHeaders()" class="grimoire-input text-xs py-1.5 font-bold uppercase text-right">
+                        <span class="px-2.5 py-1 bg-rose-950/90 border border-rose-400 text-rose-200 font-bold text-[10px] uppercase tracking-widest shrink-0">RED SIDE</span>
+                    </div>
+                </div>
+
+                <!-- BANS BAR (5 BLUE BANS + 5 RED BANS) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Blue Bans -->
+                    <div class="tarot-card p-3 flex items-center justify-between">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-sky-300 px-2">BANS AZUL</span>
+                        <div id="blueBansContainer" class="flex items-center space-x-2"></div>
+                    </div>
+
+                    <!-- Red Bans -->
+                    <div class="tarot-card p-3 flex items-center justify-between">
+                        <div id="redBansContainer" class="flex items-center space-x-2"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-rose-300 px-2">BANS ROJO</span>
+                    </div>
+                </div>
+
+                <!-- MAIN ARENA: BLUE PICKS (3 COLS) + CHAMPION POOL (6 COLS) + RED PICKS (3 COLS) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mb-10">
+                    
+                    <!-- BLUE SIDE 5 PICKS -->
+                    <div class="lg:col-span-3 space-y-2.5">
+                        <div id="blueTeamHeaderLabel" class="text-xs font-bold uppercase tracking-[0.2em] text-sky-300 border-b border-sky-400/30 pb-1.5">
+                            ✦ BLUE SIDE PICKS
+                        </div>
+                        <div id="bluePicksContainer" class="space-y-2.5"></div>
+                    </div>
+
+                    <!-- CENTER CHAMPION GRID & FILTERS -->
+                    <div class="lg:col-span-6 tarot-card p-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 mb-4 pb-3 border-b border-white/20">
+                            <div class="flex flex-wrap gap-1">
+                                <button onclick="filterDraftRole('ALL')" class="draft-role-btn tab-nav-btn active px-2.5 py-1 text-[10px] font-bold uppercase">TODOS</button>
+                                <button onclick="filterDraftRole('TOP')" class="draft-role-btn tab-nav-btn px-2.5 py-1 text-[10px] font-bold uppercase">TOP</button>
+                                <button onclick="filterDraftRole('JGL')" class="draft-role-btn tab-nav-btn px-2.5 py-1 text-[10px] font-bold uppercase">JGL</button>
+                                <button onclick="filterDraftRole('MID')" class="draft-role-btn tab-nav-btn px-2.5 py-1 text-[10px] font-bold uppercase">MID</button>
+                                <button onclick="filterDraftRole('ADC')" class="draft-role-btn tab-nav-btn px-2.5 py-1 text-[10px] font-bold uppercase">ADC</button>
+                                <button onclick="filterDraftRole('SUP')" class="draft-role-btn tab-nav-btn px-2.5 py-1 text-[10px] font-bold uppercase">SUPP</button>
+                            </div>
+
+                            <div class="relative flex-grow max-w-xs">
+                                <input type="text" id="draftChampSearch" oninput="renderDraftChampGrid()" placeholder="Buscar campeón (Ej: Ahri, Aatrox)..." class="grimoire-input text-xs py-1.5 pl-7">
+                                <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-[10px] opacity-50"></i>
+                            </div>
+                        </div>
+
+                        <!-- Scrollable Champion Icons Grid -->
+                        <div id="draftChampionGrid" class="grid grid-cols-5 sm:grid-cols-7 md:grid-cols-8 gap-2 max-h-[430px] overflow-y-auto pr-1 select-none">
+                            <!-- Cargado dinámicamente desde Riot Data Dragon -->
+                        </div>
+                    </div>
+
+                    <!-- RED SIDE 5 PICKS -->
+                    <div class="lg:col-span-3 space-y-2.5">
+                        <div id="redTeamHeaderLabel" class="text-xs font-bold uppercase tracking-[0.2em] text-rose-300 border-b border-rose-400/30 pb-1.5 text-right">
+                            RED SIDE PICKS ✦
+                        </div>
+                        <div id="redPicksContainer" class="space-y-2.5"></div>
+                    </div>
+
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- PANEL PARA GUARDAR EL DRAFT DE LA SCRIM + DISCORD         -->
+                <!-- ========================================================= -->
+                <div class="tarot-card-crimson p-6 sm:p-8 mb-12">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/20 pb-4 mb-6 gap-2">
+                        <div>
+                            <span class="grimoire-tag">[REGISTRO DE SCRIM &amp; VOD REVIEW]</span>
+                            <h3 class="font-serifDisplay text-2xl font-bold uppercase text-white mt-1">
+                                GUARDAR DRAFT EN BÓVEDA DE SCRIMS
+                            </h3>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs">
+                            <button onclick="lockCurrentDraftIntoFearlessAndNextGame()" class="px-4 py-2 bg-black/80 border border-white/50 hover:bg-white hover:text-black transition-all font-bold uppercase">
+                                ✦ ARCHIVAR PICKS EN FEARLESS Y PASAR AL SIGUIENTE MAPA →
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 text-xs">
+                        <div>
+                            <label class="block font-bold uppercase mb-1">Escuadra de BLANK</label>
+                            <select id="scrimBlankSquad" onchange="syncSquadNameToDraft()" class="grimoire-input text-xs">
+                                <option value="BLANK Eclipsed">BLANK: Eclipsed</option>
+                                <option value="BLANK Kore">BLANK: Kore</option>
+                                <option value="Last Knights Academy">Last Knights Academy</option>
+                                <option value="BLANK Main Roster">BLANK Main Roster</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold uppercase mb-1">Resultado del Mapa</label>
+                            <select id="scrimResult" class="grimoire-input text-xs font-bold">
+                                <option value="VICTORIA (W)">VICTORIA (W)</option>
+                                <option value="DERROTA (L)">DERROTA (L)</option>
+                                <option value="PENDIENTE / SIMULACIÓN">PENDIENTE / SIMULACIÓN</option>
+                            </select>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block font-bold uppercase mb-1">Notas Tácticas del Coach / Condición de Victoria</label>
+                            <input type="text" id="scrimNotes" placeholder="Ej: Buen control de prio en mid, faltó timming en 2do dragón..." class="grimoire-input text-xs">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="saveScrimDraftRecord(false)" class="px-6 py-3 bg-grimoire-parchment text-black font-bold uppercase text-xs hover:bg-white transition-all">
+                                <i class="fa-solid fa-floppy-disk mr-1.5"></i> GUARDAR SCRIM EN BÓVEDA
+                            </button>
+                            <button onclick="saveScrimDraftRecord(true)" class="px-6 py-3 bg-grimoire-crimson text-white border border-white/50 font-bold uppercase text-xs hover:bg-white hover:text-black transition-all">
+                                <i class="fa-brands fa-discord mr-1.5"></i> GUARDAR Y ENVIAR REPORTE A DISCORD ↗
+                            </button>
+                        </div>
+
+                        <div class="flex items-center space-x-2">
+                            <button onclick="exportScrimsJson()" class="px-3.5 py-2.5 border border-white/40 hover:bg-white hover:text-black transition-all text-[11px] font-bold uppercase">
+                                <i class="fa-solid fa-download mr-1"></i> EXPORTAR JSON
+                            </button>
+                            <label class="px-3.5 py-2.5 border border-white/40 hover:bg-white hover:text-black transition-all text-[11px] font-bold uppercase cursor-pointer">
+                                <i class="fa-solid fa-upload mr-1"></i> IMPORTAR JSON
+                                <input type="file" accept=".json" onchange="importScrimsJson(event)" class="hidden">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- HISTORIAL DE DRAFTS GUARDADOS (SCRIM VAULT)               -->
+                <!-- ========================================================= -->
+                <div class="pb-16">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-white/30 pb-4 mb-6 gap-3">
+                        <div>
+                            <span class="obsidian-tag">[HISTORIAL TÁCTICO // SCRIM LOGS]</span>
+                            <h3 class="font-serifDisplay text-2xl sm:text-4xl font-bold uppercase mt-1">
+                                BÓVEDA DE DRAFTS GUARDADOS
+                            </h3>
+                        </div>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <button onclick="filterScrimLogs('ALL')" class="scrim-filter-btn tab-nav-btn active px-3 py-1 font-bold uppercase">TODOS</button>
+                            <button onclick="filterScrimLogs('BLANK Eclipsed')" class="scrim-filter-btn tab-nav-btn px-3 py-1 font-bold uppercase">ECLIPSED</button>
+                            <button onclick="filterScrimLogs('BLANK Kore')" class="scrim-filter-btn tab-nav-btn px-3 py-1 font-bold uppercase">KORE</button>
+                            <button onclick="filterScrimLogs('Last Knights Academy')" class="scrim-filter-btn tab-nav-btn px-3 py-1 font-bold uppercase">LAST KNIGHTS</button>
+                        </div>
+                    </div>
+
+                    <div id="scrimVaultContainer" class="space-y-4">
+                        <!-- Renderizado dinámicamente -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
     </main>
 <!-- ========================================================= -->
@@ -2742,7 +3062,7 @@
     <!-- ========================================================= -->
     <!-- FOOTER UNIFICADO                                          -->
     <!-- ========================================================= -->
-    <footer class="bg-black text-grimoire-parchment border-t border-white/25 py-8 font-mono text-xs relative z-20 xl:pl-52">
+    <footer class="bg-black text-grimoire-parchment border-t border-white/25 py-8 font-mono text-xs relative z-20 xl:px-56">
         <div class="max-w-6xl mx-auto px-4 sm:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-3">
                 <img src="https://i.imgur.com/xQMgAgw.png" alt="BLANK Fox" class="w-7 h-7 object-contain squad-png-glow">
@@ -3060,16 +3380,17 @@
 
         window.addEventListener('scroll', handleInteractiveScroll, { passive: true });
 
-        // --- TAB SWITCHING WITH CREATIVE ARCANE CURTAIN ---
+        // --- TAB SWITCHING CORREGIDO (SOPORTA SUBPÁGINAS SIN BOTÓN EN HEADER) ---
         function switchTab(tab, skipScrollTop = false) {
-            const tabs = ['inicio', 'rosters', 'vacancies', 'tryouts', 'gallery', 'ranking'];
+            const tabs = ['inicio', 'rosters', 'vacancies', 'tryouts', 'gallery', 'ranking', 'drafter'];
             const tabLabels = {
                 inicio: '✦ SILENT AUTHORITY // INICIO ✦',
                 rosters: '✦ ARCHIVO DE ESCUADRAS // ROSTERS ✦',
                 vacancies: '✦ RECLUTAMIENTO // VACANTES MAIN ✦',
                 tryouts: '✦ SECRETARÍA EJECUTIVA // TRYOUTS ✦',
                 gallery: '✦ BÓVEDA MULTIMEDIA // GALERÍA ✦',
-                ranking: '✦ TELEMETRÍA RIOT API // RANKING ✦'
+                ranking: '✦ TELEMETRÍA RIOT API // RANKING ✦',
+                drafter: '✦ WAR ROOM // TACTICAL DRAFTER ✦'
             };
 
             const isSwitchingToDifferentTab = currentTab !== tab;
@@ -3084,33 +3405,42 @@
                     const sideBtn = document.getElementById(`side-nav-${t}`);
                     const content = document.getElementById(`tab-${t}-content`);
                     
-                    if (btn && content) {
+                    // 1. Mostrar u ocultar el contenido de la subpágina (aunque no tenga botón en el header)
+                    if (content) {
                         if (t === tab) {
-                            btn.classList.add('active');
-                            if (sideBtn) sideBtn.classList.add('active');
                             content.classList.remove('hidden');
                             content.classList.remove('tab-panel-animate');
                             void content.offsetWidth;
                             content.classList.add('tab-panel-animate');
                         } else {
-                            btn.classList.remove('active');
-                            if (sideBtn) sideBtn.classList.remove('active');
                             content.classList.add('hidden');
                             content.classList.remove('tab-panel-animate');
                         }
+                    }
+
+                    // 2. Actualizar estado activo del botón superior (si existe)
+                    if (btn) {
+                        if (t === tab) btn.classList.add('active');
+                        else btn.classList.remove('active');
+                    }
+
+                    // 3. Actualizar estado activo en el índice izquierdo (si existe)
+                    if (sideBtn) {
+                        if (t === tab) sideBtn.classList.add('active');
+                        else sideBtn.classList.remove('active');
                     }
                 });
 
                 if (tab === 'gallery') renderGallery();
                 if (tab === 'ranking') renderLeaderboard();
+                if (tab === 'drafter') initDrafterModule();
                 
-                // Aplica el modo oscuro forzado en Inicio o el modo elegido en subpáginas
                 applyEffectiveTheme();
 
                 if (!skipScrollTop) {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-
+                
                 const sidebar = document.getElementById('leftIndexSidebar');
                 if (sidebar) sidebar.classList.remove('mobile-open');
 
@@ -3128,7 +3458,6 @@
                 performDomSwitch();
             }
         }
-
         function openRosterSection(sectionId) {
             switchTab('rosters', true);
             setTimeout(() => {
@@ -3138,6 +3467,18 @@
                 }
             }, 250);
         }
+        function openDrafterForSquad(squadName) {
+         switchTab('drafter');
+         setTimeout(() => {
+             const selectEl = document.getElementById('scrimBlankSquad');
+             if (selectEl) {
+                 selectEl.value = squadName;
+                 syncSquadNameToDraft();
+             }
+             const rightBar = document.getElementById('rightDrafterSidebar');
+             if (rightBar) rightBar.classList.remove('mobile-open');
+         }, 220);
+     }
 
         // --- SCROLL REVEAL OBSERVER ---
         function initScrollReveal() {
@@ -4060,6 +4401,539 @@ async function processPlayer(p) {
         }
 
         // --- INICIALIZACIÓN AUTOMÁTICA AL ABRIR LA WEB ---
+        // =========================================================
+        // 7. BLANK TACTICAL DRAFTER & SCRIM VAULT ENGINE
+        // =========================================================
+        const DRAFT_SEQUENCE = [
+            // Ban Phase 1 (6 turns)
+            { side: 'blue', type: 'ban', index: 0, label: 'BLUE BAN 1' },
+            { side: 'red',  type: 'ban', index: 0, label: 'RED BAN 1' },
+            { side: 'blue', type: 'ban', index: 1, label: 'BLUE BAN 2' },
+            { side: 'red',  type: 'ban', index: 1, label: 'RED BAN 2' },
+            { side: 'blue', type: 'ban', index: 2, label: 'BLUE BAN 3' },
+            { side: 'red',  type: 'ban', index: 2, label: 'RED BAN 3' },
+            // Pick Phase 1 (6 turns: B1, R1, R2, B2, B3, R3)
+            { side: 'blue', type: 'pick', index: 0, role: 'TOP',  label: 'BLUE PICK 1 (B1)' },
+            { side: 'red',  type: 'pick', index: 0, role: 'TOP',  label: 'RED PICK 1 (R1)' },
+            { side: 'red',  type: 'pick', index: 1, role: 'JGL',  label: 'RED PICK 2 (R2)' },
+            { side: 'blue', type: 'pick', index: 1, role: 'JGL',  label: 'BLUE PICK 2 (B2)' },
+            { side: 'blue', type: 'pick', index: 2, role: 'MID',  label: 'BLUE PICK 3 (B3)' },
+            { side: 'red',  type: 'pick', index: 2, role: 'MID',  label: 'RED PICK 3 (R3)' },
+            // Ban Phase 2 (4 turns: R4, B4, R5, B5)
+            { side: 'red',  type: 'ban', index: 3, label: 'RED BAN 4' },
+            { side: 'blue', type: 'ban', index: 3, label: 'BLUE BAN 4' },
+            { side: 'red',  type: 'ban', index: 4, label: 'RED BAN 5' },
+            { side: 'blue', type: 'ban', index: 4, label: 'BLUE BAN 5' },
+            // Pick Phase 2 (4 turns: R4, B4, B5, R5)
+            { side: 'red',  type: 'pick', index: 3, role: 'ADC',  label: 'RED PICK 4 (R4)' },
+            { side: 'blue', type: 'pick', index: 3, role: 'ADC',  label: 'BLUE PICK 4 (B4)' },
+            { side: 'blue', type: 'pick', index: 4, role: 'SUPP', label: 'BLUE PICK 5 (B5)' },
+            { side: 'red',  type: 'pick', index: 4, role: 'SUPP', label: 'RED PICK 5 (R5)' }
+        ];
+
+        let ddragonVersion = '14.21.1';
+        let allChampionsList = [];
+        let currentDraftRoleFilter = 'ALL';
+        let currentScrimFilter = 'ALL';
+        let isFearlessEnabled = true;
+        let currentDraftGame = 1;
+        let fearlessLockedChamps = []; // Campeones jugados en mapas previos de la serie
+
+        let draftState = {
+            step: 0,
+            blueBans: [null, null, null, null, null],
+            redBans: [null, null, null, null, null],
+            bluePicks: [null, null, null, null, null],
+            redPicks: [null, null, null, null, null],
+            history: []
+        };
+
+        let savedScrimLogs = JSON.parse(localStorage.getItem('blank_scrim_drafts_v1') || '[]');
+
+        // Mapa heurístico de roles populares para facilitar el filtro por línea
+        const ROLE_CHAMP_MAP = {
+            TOP: ['Aatrox','Ambessa','Camille','Darius','Fiora','Gangplank','Garen','Gnar','Gragas','Gwen','Illaoi','Irelia','Jax','Jayce','KSante','Kennen','Kled','Malphite','Mordekaiser','Nasus','Olaf','Ornn','Pantheon','Poppy','Quinn','Renekton','Riven','Rumble','Sett','Shen','Singed','Sion','Teemo','Trundle','Tryndamere','Urgot','Volibear','Yorick'],
+            JGL: ['Amumu','Belveth','Briar','Diana','Ekko','Elise','Evelynn','Fiddlesticks','Graves','Hecarim','Ivern','JarvanIV','Karthus','Kayn','Khazix','Kindred','LeeSin','Lillia','MasterYi','Nidalee','Nocturne','Nunu','Ramus','RekSai','Rengar','Sejuani','Shaco','Shyvana','Skarner','Taliyah','Udyr','Vi','Viego','Warwick','Wukong','XinZhao','Zac'],
+            MID: ['Ahri','Akali','Akshan','Anivia','Annie','AurelionSol','Aurora','Azir','Cassiopeia','Corki','Fizz','Galio','Hwei','Kassadin','Katarina','Leblanc','Lissandra','Lux','Malzahar','Naafiri','Neeko','Orianna','Qiyana','Ryze','Sylas','Syndra','Talon','TwistedFate','Veigar','Vex','Viktor','Vladimir','Xerath','Yasuo','Yone','Zed','Ziggs','Zoe'],
+            ADC: ['Aphelios','Ashe','Caitlyn','Draven','Ezreal','Jhin','Jinx','Kaisa','Kalista','KogMaw','Lucian','MissFortune','Nilah','Samira','Senna','Sivir','Smolder','Tristana','Twitch','Varus','Vayne','Xayah','Zeri'],
+            SUP: ['Alistar','Bard','Blitzcrank','Brand','Braum','Janna','Karma','Leona','Lulu','Milio','Morgana','Nami','Nautilus','Pyke','Rakan','Rell','Renata','Seraphine','Sona','Soraka','TahmKench','Taric','Thresh','Velkoz','Yuumi','Zilean','Zyra']
+        };
+
+        async function initDrafterModule() {
+            renderDraftBoardSlots();
+            renderScrimVault();
+
+            if (allChampionsList.length > 0) {
+                renderDraftChampGrid();
+                return;
+            }
+
+            try {
+                // Obtener última versión disponible de Data Dragon
+                const vRes = await fetch('https://ddragon.leagueoflegends.com/api/versions.json');
+                if (vRes.ok) {
+                    const versions = await vRes.json();
+                    if (versions && versions[0]) ddragonVersion = versions[0];
+                }
+
+                const cRes = await fetch(`https://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/data/es_MX/champion.json`);
+                const cData = await cRes.json();
+                allChampionsList = Object.values(cData.data).map(ch => ({
+                    id: ch.id,
+                    name: ch.name,
+                    tags: ch.tags || []
+                })).sort((a, b) => a.name.localeCompare(b.name));
+
+                renderDraftChampGrid();
+            } catch (err) {
+                console.warn('Error cargando Data Dragon, usando lista base:', err);
+            }
+        }
+
+        function filterDraftRole(role) {
+            currentDraftRoleFilter = role;
+            document.querySelectorAll('.draft-role-btn').forEach(btn => {
+                if (btn.innerText === role || (role === 'ALL' && btn.innerText === 'TODOS') || (role === 'SUP' && btn.innerText === 'SUPP')) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            renderDraftChampGrid();
+        }
+
+        function isChampAlreadyUsedInCurrentDraft(champId) {
+            const inBans = draftState.blueBans.some(c => c?.id === champId) || draftState.redBans.some(c => c?.id === champId);
+            const inPicks = draftState.bluePicks.some(c => c?.id === champId) || draftState.redPicks.some(c => c?.id === champId);
+            return inBans || inPicks;
+        }
+
+        function isChampFearlessLocked(champId) {
+            return isFearlessEnabled && fearlessLockedChamps.includes(champId);
+        }
+
+        function renderDraftChampGrid() {
+            const grid = document.getElementById('draftChampionGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const search = (document.getElementById('draftChampSearch')?.value || '').toLowerCase();
+
+            const filtered = allChampionsList.filter(ch => {
+                const matchName = ch.name.toLowerCase().includes(search) || ch.id.toLowerCase().includes(search);
+                if (!matchName) return false;
+                if (currentDraftRoleFilter === 'ALL') return true;
+                const roleList = ROLE_CHAMP_MAP[currentDraftRoleFilter] || [];
+                return roleList.includes(ch.id);
+            });
+
+            filtered.forEach(ch => {
+                const usedNow = isChampAlreadyUsedInCurrentDraft(ch.id);
+                const fearlessLocked = isChampFearlessLocked(ch.id);
+                const disabled = usedNow || fearlessLocked || draftState.step >= 20;
+
+                const btn = document.createElement('button');
+                btn.className = `relative group flex flex-col items-center p-1 border transition-all ${
+                    disabled
+                        ? 'border-white/10 opacity-25 grayscale cursor-not-allowed'
+                        : 'border-white/20 hover:border-white hover:scale-105 cursor-pointer bg-black/50'
+                }`;
+                btn.disabled = disabled;
+                btn.onclick = () => selectChampionForDraft(ch);
+
+                btn.innerHTML = `
+                    <div class="relative w-12 h-12 overflow-hidden">
+                        <img src="https://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/img/champion/${ch.id}.png" 
+                             alt="${ch.name}" 
+                             loading="lazy"
+                             class="w-full h-full object-cover">
+                        ${fearlessLocked ? '<span class="absolute inset-0 bg-grimoire-crimson/80 flex items-center justify-center text-[8px] font-bold text-white uppercase">FEARLESS</span>' : ''}
+                    </div>
+                    <span class="text-[9px] truncate w-full text-center mt-1 font-mono">${ch.name}</span>
+                `;
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectChampionForDraft(champ) {
+            if (draftState.step >= 20) return;
+            if (isChampAlreadyUsedInCurrentDraft(champ.id) || isChampFearlessLocked(champ.id)) return;
+
+            const currentTurn = DRAFT_SEQUENCE[draftState.step];
+            draftState.history.push(JSON.parse(JSON.stringify({
+                step: draftState.step,
+                blueBans: draftState.blueBans,
+                redBans: draftState.redBans,
+                bluePicks: draftState.bluePicks,
+                redPicks: draftState.redPicks
+            })));
+
+            if (currentTurn.side === 'blue' && currentTurn.type === 'ban') {
+                draftState.blueBans[currentTurn.index] = champ;
+            } else if (currentTurn.side === 'red' && currentTurn.type === 'ban') {
+                draftState.redBans[currentTurn.index] = champ;
+            } else if (currentTurn.side === 'blue' && currentTurn.type === 'pick') {
+                draftState.bluePicks[currentTurn.index] = champ;
+            } else if (currentTurn.side === 'red' && currentTurn.type === 'pick') {
+                draftState.redPicks[currentTurn.index] = champ;
+            }
+
+            draftState.step++;
+            renderDraftBoardSlots();
+            renderDraftChampGrid();
+        }
+
+        function renderDraftBoardSlots() {
+            const banner = document.getElementById('draftPhaseBanner');
+            const fearlessTxt = document.getElementById('fearlessCounterText');
+            if (fearlessTxt) {
+                fearlessTxt.innerText = `FEARLESS BLOQUEADOS: ${isFearlessEnabled ? fearlessLockedChamps.length : 'OFF'}`;
+            }
+
+            if (banner) {
+                if (draftState.step >= 20) {
+                    banner.innerText = '✦ DRAFT COMPLETADO (20/20) // LISTO PARA GUARDAR ✦';
+                    banner.className = 'px-4 py-1.5 bg-grimoire-crimson text-white border border-white font-bold text-xs uppercase tracking-[0.2em]';
+                } else {
+                    const turn = DRAFT_SEQUENCE[draftState.step];
+                    const stepNum = String(draftState.step + 1).padStart(2, '0');
+                    banner.innerText = `TURNO ${stepNum}/20 // ${turn.label}`;
+                    banner.className = turn.side === 'blue'
+                        ? 'px-4 py-1.5 bg-sky-900 text-white border border-sky-300 font-bold text-xs uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(56,189,248,0.4)]'
+                        : 'px-4 py-1.5 bg-rose-950 text-white border border-rose-300 font-bold text-xs uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(251,113,133,0.4)]';
+                }
+            }
+
+            const activeTurn = draftState.step < 20 ? DRAFT_SEQUENCE[draftState.step] : null;
+
+            // Render Bans
+            const renderBanRow = (arr, side) => arr.map((ch, idx) => {
+                const isActive = activeTurn && activeTurn.side === side && activeTurn.type === 'ban' && activeTurn.index === idx;
+                return `
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 bg-black/80 border ${isActive ? 'border-white scale-110 shadow-[0_0_12px_#fff]' : 'border-white/25'} relative overflow-hidden flex items-center justify-center transition-all">
+                        ${ch ? `
+                            <img src="https://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/img/champion/${ch.id}.png" class="w-full h-full object-cover grayscale opacity-75">
+                            <div class="absolute inset-0 flex items-center justify-center text-rose-500 text-lg font-bold drop-shadow-[0_0_4px_#000]">✕</div>
+                        ` : `<span class="text-[9px] opacity-40">B${idx + 1}</span>`}
+                    </div>
+                `;
+            }).join('');
+
+            const blueBansEl = document.getElementById('blueBansContainer');
+            const redBansEl = document.getElementById('redBansContainer');
+            if (blueBansEl) blueBansEl.innerHTML = renderBanRow(draftState.blueBans, 'blue');
+            if (redBansEl) redBansEl.innerHTML = renderBanRow(draftState.redBans, 'red');
+
+            // Render Picks (Splash Art Horizontal Cards)
+            const rolesOrder = ['TOP', 'JGL', 'MID', 'ADC', 'SUPP'];
+            const renderPickColumn = (arr, side) => arr.map((ch, idx) => {
+                const isActive = activeTurn && activeTurn.side === side && activeTurn.type === 'pick' && activeTurn.index === idx;
+                const borderClass = isActive
+                    ? (side === 'blue' ? 'border-sky-300 shadow-[0_0_18px_rgba(56,189,248,0.45)]' : 'border-rose-300 shadow-[0_0_18px_rgba(251,113,133,0.45)]')
+                    : 'border-white/25';
+
+                return `
+                    <div class="relative h-20 bg-black/85 border ${borderClass} overflow-hidden flex items-center justify-between px-4 transition-all">
+                        ${ch ? `
+                            <img src="https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${ch.id}_0.jpg" 
+                                 class="absolute inset-0 w-full h-full object-cover object-top opacity-55 scale-105 transition-transform">
+                            <div class="absolute inset-0 bg-gradient-to-r ${side === 'blue' ? 'from-black/90 via-black/40 to-transparent' : 'from-transparent via-black/40 to-black/90'}"></div>
+                        ` : ''}
+                        <div class="relative z-10 flex items-center space-x-3 ${side === 'red' ? 'ml-auto text-right flex-row-reverse space-x-reverse' : ''}">
+                            <span class="px-2 py-0.5 bg-black/80 border border-white/30 text-[9px] font-bold text-grimoire-gold">${rolesOrder[idx]}</span>
+                            <div>
+                                <div class="font-serifDisplay text-base sm:text-lg font-bold uppercase text-white">
+                                    ${ch ? ch.name : (isActive ? 'SELECCIONANDO...' : `PICK ${idx + 1}`)}
+                                </div>
+                                <div class="text-[9px] opacity-70 uppercase">${side === 'blue' ? `B${idx + 1}` : `R${idx + 1}`}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const bluePicksEl = document.getElementById('bluePicksContainer');
+            const redPicksEl = document.getElementById('redPicksContainer');
+            if (bluePicksEl) bluePicksEl.innerHTML = renderPickColumn(draftState.bluePicks, 'blue');
+            if (redPicksEl) redPicksEl.innerHTML = renderPickColumn(draftState.redPicks, 'red');
+        }
+
+        function undoLastDraftAction() {
+            if (draftState.history.length === 0) return;
+            const prev = draftState.history.pop();
+            draftState.step = prev.step;
+            draftState.blueBans = prev.blueBans;
+            draftState.redBans = prev.redBans;
+            draftState.bluePicks = prev.bluePicks;
+            draftState.redPicks = prev.redPicks;
+            renderDraftBoardSlots();
+            renderDraftChampGrid();
+        }
+
+        function resetCurrentGameDraft() {
+            draftState = {
+                step: 0,
+                blueBans: [null, null, null, null, null],
+                redBans: [null, null, null, null, null],
+                bluePicks: [null, null, null, null, null],
+                redPicks: [null, null, null, null, null],
+                history: []
+            };
+            renderDraftBoardSlots();
+            renderDraftChampGrid();
+            showToast(`MAPA G${currentDraftGame} REINICIADO`);
+        }
+
+        function toggleFearlessMode() {
+            isFearlessEnabled = !isFearlessEnabled;
+            const btn = document.getElementById('fearlessToggleBtn');
+            if (btn) {
+                btn.innerHTML = isFearlessEnabled ? '<span>✦ FEARLESS: ON</span>' : '<span>◇ FEARLESS: OFF</span>';
+                btn.className = isFearlessEnabled
+                    ? 'px-3.5 py-2 border border-white/50 bg-grimoire-crimson text-white font-bold uppercase text-[11px] tracking-wider flex items-center space-x-2'
+                    : 'px-3.5 py-2 border border-white/30 bg-black/60 text-white/60 font-bold uppercase text-[11px] tracking-wider flex items-center space-x-2';
+            }
+            renderDraftBoardSlots();
+            renderDraftChampGrid();
+        }
+
+        function setDraftGameNumber(num) {
+            currentDraftGame = num;
+            for (let i = 1; i <= 5; i++) {
+                const b = document.getElementById(`draft-g${i}`);
+                if (b) {
+                    b.className = i === num ? 'px-2 py-0.5 bg-white text-black font-bold' : 'px-2 py-0.5 hover:bg-white/20';
+                }
+            }
+            showToast(`CAMBIADO A GAME ${num}`);
+        }
+
+        function lockCurrentDraftIntoFearlessAndNextGame() {
+            const pickedIds = [
+                ...draftState.bluePicks.filter(Boolean).map(c => c.id),
+                ...draftState.redPicks.filter(Boolean).map(c => c.id)
+            ];
+            if (pickedIds.length === 0) {
+                showToast('SELECCIONA AL MENOS UN CAMPEÓN ANTES DE ARCHIVAR EN FEARLESS');
+                return;
+            }
+            pickedIds.forEach(id => {
+                if (!fearlessLockedChamps.includes(id)) fearlessLockedChamps.push(id);
+            });
+            const nextG = Math.min(5, currentDraftGame + 1);
+            setDraftGameNumber(nextG);
+            resetCurrentGameDraft();
+            showToast(`${pickedIds.length} CAMPEONES BLOQUEADOS EN FEARLESS → PASANDO A G${nextG}`);
+        }
+
+        function clearFearlessPool() {
+            fearlessLockedChamps = [];
+            setDraftGameNumber(1);
+            resetCurrentGameDraft();
+            showToast('POOL FEARLESS Y SERIE REINICIADOS A CERO');
+        }
+
+        function swapDraftSides() {
+            const blueIn = document.getElementById('blueTeamNameInput');
+            const redIn = document.getElementById('redTeamNameInput');
+            if (blueIn && redIn) {
+                const temp = blueIn.value;
+                blueIn.value = redIn.value;
+                redIn.value = temp;
+                updateDraftHeaders();
+            }
+        }
+
+        function updateDraftHeaders() {
+            const blueName = document.getElementById('blueTeamNameInput')?.value || 'BLUE SIDE';
+            const redName = document.getElementById('redTeamNameInput')?.value || 'RED SIDE';
+            const bHeader = document.getElementById('blueTeamHeaderLabel');
+            const rHeader = document.getElementById('redTeamHeaderLabel');
+            if (bHeader) bHeader.innerText = `✦ ${blueName}`;
+            if (rHeader) rHeader.innerText = `${redName} ✦`;
+        }
+
+        function syncSquadNameToDraft() {
+            const sq = document.getElementById('scrimBlankSquad')?.value || 'BLANK ECLIPSED';
+            const blueIn = document.getElementById('blueTeamNameInput');
+            if (blueIn) {
+                blueIn.value = sq.toUpperCase();
+                updateDraftHeaders();
+            }
+        }
+
+        // --- GUARDAR SCRIM Y ENVIAR A DISCORD CON LA SECRETARIA ---
+        async function saveScrimDraftRecord(sendToDiscord = false) {
+            const squad = document.getElementById('scrimBlankSquad')?.value || 'BLANK Eclipsed';
+            const blueTeam = document.getElementById('blueTeamNameInput')?.value || 'BLUE SIDE';
+            const redTeam = document.getElementById('redTeamNameInput')?.value || 'RED SIDE';
+            const result = document.getElementById('scrimResult')?.value || 'VICTORIA (W)';
+            const notes = document.getElementById('scrimNotes')?.value || 'Sin notas adicionales de VOD Review.';
+
+            const record = {
+                id: 'scrim-' + Date.now(),
+                date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                gameNumber: currentDraftGame,
+                squad,
+                blueTeam,
+                redTeam,
+                result,
+                notes,
+                blueBans: draftState.blueBans.filter(Boolean).map(c => c.id),
+                redBans: draftState.redBans.filter(Boolean).map(c => c.id),
+                bluePicks: draftState.bluePicks.filter(Boolean).map(c => c.id),
+                redPicks: draftState.redPicks.filter(Boolean).map(c => c.id)
+            };
+
+            savedScrimLogs.unshift(record);
+            localStorage.setItem('blank_scrim_drafts_v1', JSON.stringify(savedScrimLogs));
+            renderScrimVault();
+
+            if (sendToDiscord) {
+                const payload = {
+                    username: 'Archivista Táctica // BLANK War Room',
+                    avatar_url: 'https://i.imgur.com/xQMgAgw.png',
+                    content: `♟️ *«Buenas noches, cuerpo técnico de **${squad}**. Acabo de archivar el registro oficial de Draft correspondiente al **Game ${record.gameNumber}** (${blueTeam} vs ${redTeam}). Les dejo el desglose táctico para el VOD Review:»*`,
+                    embeds: [
+                        {
+                            title: `✥ REPORTE DE SCRIM // GAME ${record.gameNumber} (${result})`,
+                            description: `**Escuadra:** ${squad}\n**Enfrentamiento:** \`${blueTeam}\` (Blue) vs \`${redTeam}\` (Red)`,
+                            color: result.includes('VICTORIA') ? 5763719 : 10365493,
+                            fields: [
+                                { name: `🔵 ${blueTeam} Picks`, value: record.bluePicks.join(' • ') || 'Sin picks', inline: true },
+                                { name: `🔴 ${redTeam} Picks`, value: record.redPicks.join(' • ') || 'Sin picks', inline: true },
+                                { name: '🚫 Bans (Azul / Rojo)', value: `**B:** ${record.blueBans.join(', ') || '--'}\n**R:** ${record.redBans.join(', ') || '--'}`, inline: false },
+                                { name: '📝 Notas del Coach / VOD Review', value: `>>> ${notes}`, inline: false }
+                            ],
+                            footer: { text: `BLANK Tactical Drafter • ${record.date}` }
+                        }
+                    ]
+                };
+
+                try {
+                    await fetch(DISCORD_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    showToast('SCRIM GUARDADA Y ENVIADA A DISCORD');
+                } catch (e) {
+                    showToast('SCRIM GUARDADA LOCALMENTE (ERROR DE RED DISCORD)');
+                }
+            } else {
+                showToast('DRAFT DE SCRIM GUARDADO EN LA BÓVEDA');
+            }
+        }
+
+        function filterScrimLogs(squad) {
+            currentScrimFilter = squad;
+            document.querySelectorAll('.scrim-filter-btn').forEach(btn => {
+                if (btn.innerText === 'TODOS' && squad === 'ALL') btn.classList.add('active');
+                else if (squad.toUpperCase().includes(btn.innerText)) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            renderScrimVault();
+        }
+
+        function deleteScrimRecord(id) {
+            savedScrimLogs = savedScrimLogs.filter(s => s.id !== id);
+            localStorage.setItem('blank_scrim_drafts_v1', JSON.stringify(savedScrimLogs));
+            renderScrimVault();
+            showToast('REGISTRO DE SCRIM ELIMINADO');
+        }
+
+        function renderScrimVault() {
+            const container = document.getElementById('scrimVaultContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const list = savedScrimLogs.filter(s => currentScrimFilter === 'ALL' || s.squad === currentScrimFilter);
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="tarot-card p-10 text-center text-xs opacity-75">
+                        No hay drafts guardados en esta categoría aún. Completa una simulación arriba y presiona "Guardar Scrim en Bóveda".
+                    </div>
+                `;
+                return;
+            }
+
+            list.forEach(item => {
+                const isWin = item.result.includes('VICTORIA');
+                const renderMiniIcons = (arr) => (arr || []).map(cid => `
+                    <img src="https://ddragon.leagueoflegends.com/cdn/${ddragonVersion}/img/champion/${cid}.png" 
+                         title="${cid}" 
+                         class="w-8 h-8 border border-white/50 object-cover">
+                `).join('');
+
+                const card = document.createElement('div');
+                card.className = 'tarot-card p-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 text-xs';
+                card.innerHTML = `
+                    <div class="space-y-1.5">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="${isWin ? 'grimoire-tag' : 'crimson-tag'}">${item.result}</span>
+                            <span class="obsidian-tag">GAME ${item.gameNumber || 1}</span>
+                            <span class="font-bold text-white uppercase">${item.squad}</span>
+                            <span class="opacity-60 text-[10px]">• ${item.date}</span>
+                        </div>
+                        <div class="font-serifDisplay text-lg font-bold uppercase text-white">
+                            ${item.blueTeam} <span class="text-grimoire-gold text-xs mx-1">VS</span> ${item.redTeam}
+                        </div>
+                        <p class="text-[11px] opacity-80 italic">"${item.notes}"</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-4">
+                        <div>
+                            <div class="text-[9px] text-sky-300 uppercase mb-1">BLUE PICKS</div>
+                            <div class="flex space-x-1">${renderMiniIcons(item.bluePicks)}</div>
+                        </div>
+                        <div class="text-white/40 font-bold">VS</div>
+                        <div>
+                            <div class="text-[9px] text-rose-300 uppercase mb-1">RED PICKS</div>
+                            <div class="flex space-x-1">${renderMiniIcons(item.redPicks)}</div>
+                        </div>
+                        <button onclick="deleteScrimRecord('${item.id}')" title="Eliminar registro" class="px-2.5 py-2 border border-white/25 hover:border-rose-500 hover:text-rose-400 transition-colors">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function exportScrimsJson() {
+            const blob = new Blob([JSON.stringify(savedScrimLogs, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `blank-scrims-${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('HISTORIAL DE SCRIMS EXPORTADO EN JSON');
+        }
+
+        function importScrimsJson(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        savedScrimLogs = imported;
+                        localStorage.setItem('blank_scrim_drafts_v1', JSON.stringify(savedScrimLogs));
+                        renderScrimVault();
+                        showToast('HISTORIAL DE SCRIMS IMPORTADO CORRECTAMENTE');
+                    }
+                } catch (err) {
+                    showToast('ARCHIVO JSON INVÁLIDO');
+                }
+            };
+            reader.readAsText(file);
+        }
+
         window.onload = function() {
             initDynamicWallpaperAndIntro();
             switchTab('inicio');
