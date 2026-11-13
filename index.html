@@ -738,38 +738,19 @@
     <div id="dynamicWallpaperLayer"></div>
     <div class="renaissance-halftone-overlay"></div>
 
-    <!-- 2. RENAISSANCE MULTIMEDIA INTRO OVERLAY (SIN BLOQUEO DE SOURCES) -->
-    <div id="renaissanceIntroModal" onclick="unlockIntroAudio()" ondblclick="enterGrimoireExperience()">
+    <!-- 2. RENAISSANCE MULTIMEDIA INTRO OVERLAY (CONECTADO DIRECTO A TU URL) -->
+    <div id="renaissanceIntroModal" onclick="unlockIntroAudio()">
         <video id="introCustomVideo" 
-               src="./intro.mp4" 
-               class="absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-500" 
+               src="https://allthelow-122.github.io/tests-blank/intro.mp4" 
+               class=" inset-0 w-full h-full object-contain bg-black z-20" 
                autoplay 
                muted 
                playsinline 
                preload="auto">
         </video>
 
-        <!-- Emblema Renacentista (Se ve si no hay video o mientras carga, y desaparece si el video arranca) -->
-        <div id="introFallbackGraphic" class="relative z-10 max-w-xl w-full px-6 text-center flex flex-col items-center pointer-events-none transition-opacity duration-500">
-            <div class="flex items-center space-x-3 font-mono text-[10px] tracking-[0.28em] uppercase text-grimoire-parchment/80 mb-6">
-                <span>✦</span>
-                <span>IF NO ONE CHOOSES YOU, CHOOSE YOURSELF</span>
-                <span>✦</span>
-            </div>
-            <svg class="w-48 h-16 crown-halo-svg mb-4" viewBox="0 0 240 70" fill="none">
-                <ellipse cx="120" cy="35" rx="92" ry="18" stroke="#ffffff" stroke-width="2.2" stroke-dasharray="10 4"/>
-                <ellipse cx="120" cy="35" rx="102" ry="22" stroke="#dcd2c0" stroke-width="0.9" stroke-opacity="0.7"/>
-                <path d="M40 35 L25 28 M70 20 L62 8 M120 15 L120 2 M170 20 L178 8 M200 35 L215 28 M75 50 L65 62 M120 54 L120 67 M165 50 L175 62" stroke="#ffffff" stroke-width="1.5"/>
-            </svg>
-            <h1 class="silent-authority-title text-5xl sm:text-7xl font-bold uppercase tracking-widest mb-2">
-                BLANK
-            </h1>
-            <p class="font-mono text-[11px] tracking-[0.35em] uppercase text-grimoire-gold">
-                SILENT AUTHORITY // EST. THROUGH FIRE
-            </p>
-        </div>
-
-        <div id="introAudioHint" class="hidden absolute bottom-6 right-6 z-20 font-mono text-[10px] tracking-[0.25em] uppercase text-white/75 bg-black/70 px-3.5 py-2 border border-white/30 backdrop-blur-sm pointer-events-none transition-opacity duration-500">
+        <!-- Indicador sutil para activar el sonido con 1 clic -->
+        <div id="introAudioHint" class="absolute bottom-6 right-6 z-30 font-mono text-[10px] tracking-[0.25em] uppercase text-white/80 bg-black/80 px-3.5 py-2 border border-white/30 backdrop-blur-sm pointer-events-none transition-opacity duration-500">
             <i class="fa-solid fa-volume-xmark mr-1.5"></i> CLIC EN PANTALLA PARA SONIDO
         </div>
     </div>
@@ -2821,20 +2802,20 @@
         }
 
       // =========================================================
-        // 1. AUTO-DETECT GITHUB WALLPAPER & SMART INTRO HANDLER
+        // 1. WALLPAPER DINÁMICO E INTRO DIRECTA HASTA EL FINAL
         // =========================================================
         function initDynamicWallpaperAndIntro() {
             const savedCustomWp = localStorage.getItem('blank_custom_wallpaper');
             if (savedCustomWp) {
                 setWallpaperCssUrl(savedCustomWp);
             } else {
-                probeImageExists('./wallpaper.jpg', (existsJpg) => {
+                probeImageExists('https://allthelow-122.github.io/tests-blank/wallpaper.jpg?v=' + Date.now(), (existsJpg) => {
                     if (existsJpg) {
-                        setWallpaperCssUrl('./wallpaper.jpg?t=' + Date.now());
+                        setWallpaperCssUrl('https://allthelow-122.github.io/tests-blank/wallpaper.jpg?v=' + Date.now());
                     } else {
-                        probeImageExists('./wallpaper.png', (existsPng) => {
+                        probeImageExists('https://allthelow-122.github.io/tests-blank/wallpaper.png?v=' + Date.now(), (existsPng) => {
                             if (existsPng) {
-                                setWallpaperCssUrl('./wallpaper.png?t=' + Date.now());
+                                setWallpaperCssUrl('https://allthelow-122.github.io/tests-blank/wallpaper.png?v=' + Date.now());
                             } else {
                                 setWallpaperCssUrl(DEFAULT_DEMO_WALLPAPER);
                             }
@@ -2844,92 +2825,19 @@
             }
 
             const introVid = document.getElementById('introCustomVideo');
-            const fallbackGraphic = document.getElementById('introFallbackGraphic');
-            const audioHint = document.getElementById('introAudioHint');
+            if (!introVid) return;
 
-            if (!introVid) {
-                enterGrimoireExperience();
-                return;
-            }
-
-            let hasValidVideo = false;
             introVid.muted = true;
 
-            // Si el video carga metadatos válidos (Duración y Dimensiones reales)
-            introVid.onloadeddata = () => {
-                if (introVid.videoWidth > 0 && !isNaN(introVid.duration)) {
-                    hasValidVideo = true;
-                    introVid.classList.remove('opacity-0');
-                    introVid.classList.add('opacity-100');
-                    if (fallbackGraphic) fallbackGraphic.style.opacity = '0';
-                    if (audioHint) audioHint.classList.remove('hidden');
-                }
-            };
-
-            // Cuando termina el video, entra solo a la web
-            introVid.onended = () => {
+            // ÚNICA CONDICIÓN DE SALIDA: Cuando el video termina por completo, se abre la página
+            introVid.onended = function() {
                 enterGrimoireExperience();
             };
 
-            // Si el archivo ./intro.mp4 no existe (404) o el códec no es compatible, entra tras 2.4s de intro gráfica
-            introVid.onerror = () => {
-                setTimeout(() => {
-                    enterGrimoireExperience();
-                }, 2400);
-            };
-
-            // Seguro adicional por si el navegador deja Duración en NaN sin lanzar onerror
-            setTimeout(() => {
-                if (!hasValidVideo || isNaN(introVid.duration) || introVid.paused) {
-                    enterGrimoireExperience();
-                }
-            }, 2600);
-
-            const playPromise = introVid.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    setTimeout(() => enterGrimoireExperience(), 2400);
-                });
-            }
-        }
-
-        // Permite activar el audio haciendo clic en cualquier parte durante la intro
-        function unlockIntroAudio() {
-            const vid = document.getElementById('introCustomVideo');
-            const hint = document.getElementById('introAudioHint');
-            if (vid && vid.muted) {
-                vid.muted = false;
-                if (hint) {
-                    hint.innerHTML = '<i class="fa-solid fa-volume-high mr-1.5"></i> AUDIO ACTIVO';
-                    setTimeout(() => { hint.style.opacity = '0'; }, 1200);
-                }
-            }
-        }
-
-        function enterGrimoireExperience() {
-            const modal = document.getElementById('renaissanceIntroModal');
-            const vid = document.getElementById('introCustomVideo');
-            if (modal) modal.classList.add('intro-hidden');
-            if (vid) vid.pause();
-        }
-
-        function replayIntroModal() {
-            const modal = document.getElementById('renaissanceIntroModal');
-            const vid = document.getElementById('introCustomVideo');
-            const hint = document.getElementById('introAudioHint');
-            if (modal) modal.classList.remove('intro-hidden');
-            if (hint) {
-                hint.style.opacity = '1';
-                hint.innerHTML = '<i class="fa-solid fa-volume-high mr-1.5"></i> AUDIO ACTIVO';
-            }
-            if (vid) {
-                vid.currentTime = 0;
-                vid.muted = false;
-                vid.play().catch(() => {
-                    vid.muted = true;
-                    vid.play().catch(() => {});
-                });
-            }
+            // Forzar inicio de reproducción
+            introVid.play().catch((err) => {
+                console.warn('Esperando clic del usuario para reproducir:', err);
+            });
         }
 
         function probeImageExists(url, callback) {
