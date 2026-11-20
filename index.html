@@ -1086,17 +1086,13 @@
                         <span class="text-white text-xl leading-none mt-2 mr-0.5 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">✥</span>
                     </div>
 
-                    <!-- RADIANT CROWN OF THORNS HALO ABOVE THE TITLE -->
+                    <!-- BLANK FOX INSIGNIA ABOVE THE TITLE -->
                     <div class="mb-4 flex flex-col items-center">
-                        <svg class="w-56 sm:w-72 h-20 crown-halo-svg" viewBox="0 0 280 80" fill="none">
-                            <ellipse cx="140" cy="40" rx="110" ry="20" stroke="#ffffff" stroke-width="2.4" stroke-dasharray="14 5"/>
-                            <ellipse cx="140" cy="40" rx="122" ry="25" stroke="#dcd2c0" stroke-width="1" stroke-opacity="0.75"/>
-                            <ellipse cx="140" cy="40" rx="95" ry="15" stroke="#ffffff" stroke-width="0.9" stroke-opacity="0.6"/>
-                            <!-- Thorns & Radiant Spikes -->
-                            <path d="M30 40 L10 32 M65 22 L52 6 M105 16 L100 2 M140 14 L140 0 M175 16 L180 2 M215 22 L228 6 M250 40 L270 32 M75 58 L62 72 M140 64 L140 78 M205 58 L218 72" stroke="#ffffff" stroke-width="1.6"/>
-                        </svg>
+                        <img src="https://i.imgur.com/xQMgAgw.png" 
+                             onerror="this.src='https://placehold.co/120x120/050507/f2ece4?text=FOX'" 
+                             alt="BLANK Fox Emblem" 
+                             class="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-[0_0_18px_rgba(255,255,255,0.65)] transition-transform duration-500 hover:scale-110">
                     </div>
-
                     <!-- MONUMENTAL KINETIC DISPLAY TITLE (DOCKING LETTERS TO SCREEN EDGES) -->
                     <div id="kineticHeroFrame" 
                          onmouseenter="setKineticHeroState(true)" 
@@ -3344,37 +3340,39 @@
             }
         }
 
+        let isScrollTicking = false;
+
         function handleInteractiveScroll() {
-            const y = window.scrollY || window.pageYOffset;
+            if (isScrollTicking) return;
+            isScrollTicking = true;
 
-            // Subtle parallax scale on background wallpaper
-            const wpLayer = document.getElementById('dynamicWallpaperLayer');
-            if (wpLayer) {
-                const scaleVal = 1 + Math.min(0.08, y * 0.00008);
-                wpLayer.style.transform = `scale(${scaleVal.toFixed(4)})`;
-            }
+            window.requestAnimationFrame(() => {
+                const y = window.scrollY || window.pageYOffset;
 
-            // Dock Hero "BLANK" letters to the edges when scrolling down
-            if (!manualKineticOverride && currentTab === 'inicio') {
-                setKineticHeroState(y > 55);
-            }
-
-            // Expand News Board smoothly when reaching the bottom section
-            const newsSection = document.getElementById('noticias-avisos');
-            const newsPanel = document.getElementById('newsExpandablePanel');
-            const btnTxt = document.getElementById('newsManualBtnText');
-            if (newsSection && newsPanel && currentTab === 'inicio') {
-                const rect = newsSection.getBoundingClientRect();
-                const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-                const shouldExpand = rect.top < windowHeight * 0.76;
-                if (shouldExpand || manualNewsExpanded) {
-                    newsPanel.classList.add('is-expanded');
-                    if (btnTxt) btnTxt.innerText = 'CONTRAER TABLÓN ↖';
-                } else {
-                    newsPanel.classList.remove('is-expanded');
-                    if (btnTxt) btnTxt.innerText = 'EXTENDER TABLÓN ↘';
+                // 1. Dock Hero "BLANK" letters to the edges when scrolling down
+                if (!manualKineticOverride && currentTab === 'inicio') {
+                    setKineticHeroState(y > 55);
                 }
-            }
+
+                // 2. Expand News Board smoothly when reaching the bottom section
+                const newsSection = document.getElementById('noticias-avisos');
+                const newsPanel = document.getElementById('newsExpandablePanel');
+                const btnTxt = document.getElementById('newsManualBtnText');
+                if (newsSection && newsPanel && currentTab === 'inicio') {
+                    const rect = newsSection.getBoundingClientRect();
+                    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+                    const shouldExpand = rect.top < windowHeight * 0.76;
+                    if (shouldExpand || manualNewsExpanded) {
+                        newsPanel.classList.add('is-expanded');
+                        if (btnTxt) btnTxt.innerText = 'CONTRAER TABLÓN ↖';
+                    } else {
+                        newsPanel.classList.remove('is-expanded');
+                        if (btnTxt) btnTxt.innerText = 'EXTENDER TABLÓN ↘';
+                    }
+                }
+
+                isScrollTicking = false;
+            });
         }
 
         window.addEventListener('scroll', handleInteractiveScroll, { passive: true });
