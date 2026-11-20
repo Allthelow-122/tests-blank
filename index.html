@@ -795,7 +795,11 @@
                playsinline 
                preload="auto">
         </video>
-
+<!-- BOTÓN DISCRETO PARA SALTAR LA INTRO SI LO DESEAS -->
+        <button onclick="enterGrimoireExperience()" 
+                class="absolute top-6 right-6 z-30 font-mono text-[10px] tracking-[0.25em] uppercase text-white/70 bg-black/75 px-3.5 py-2 border border-white/25 hover:bg-white hover:text-black transition-all cursor-pointer select-none">
+            SALTAR INTRO ↗
+        </button>
         <!-- BOTÓN DISCRETO PARA MUTEAR / DESMUTEAR DURANTE EL VIDEO -->
         <div id="introAudioHint" 
              onclick="event.stopPropagation(); toggleIntroAudio();" 
@@ -3163,8 +3167,28 @@
 
             // Cuando el video termine por completo, entra a la web principal
             introVid.onended = function() {
-                enterGrimoireExperience();
-            };
+            let hasEnteredMainSite = false;
+
+        function enterGrimoireExperience() {
+            if (hasEnteredMainSite) return;
+            hasEnteredMainSite = true;
+
+            const modal = document.getElementById('renaissanceIntroModal');
+            const introVid = document.getElementById('introCustomVideo');
+
+            if (introVid) {
+                introVid.pause();
+            }
+
+            if (modal) {
+                modal.style.transition = 'opacity 0.75s ease';
+                modal.style.opacity = '0';
+                modal.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.style.display = 'none';
+                }, 750);
+            }
         }
 
         function startBlankIntroWithSound() {
@@ -3179,11 +3203,19 @@
                 setTimeout(() => gate.classList.add('hidden'), 700);
             }
 
-            // 2. Arrancar el video desde 0 con el sonido activado al 100%
+            // 2. Arrancar el video con sonido activado al 100% y salida automática al terminar
             if (introVid) {
                 introVid.currentTime = 0;
                 introVid.muted = false;
                 introVid.volume = 1.0;
+
+                // Doble seguro de salida: por evento ended Y por tiempo restante
+                introVid.onended = () => enterGrimoireExperience();
+                introVid.ontimeupdate = () => {
+                    if (introVid.duration > 0 && (introVid.duration - introVid.currentTime) <= 0.15) {
+                        enterGrimoireExperience();
+                    }
+                };
 
                 const playPromise = introVid.play();
                 if (playPromise !== undefined) {
@@ -3191,7 +3223,7 @@
                         if (audioHint) audioHint.classList.remove('hidden');
                         updateIntroAudioUI(false);
                     }).catch(() => {
-                        // Respaldo extremo por si algún navegador estricto bloquea audio
+                        // Respaldo por si el navegador bloquea el audio
                         introVid.muted = true;
                         introVid.play();
                         if (audioHint) audioHint.classList.remove('hidden');
@@ -3200,7 +3232,6 @@
                 }
             }
         }
-
         function updateIntroAudioUI(isMuted) {
             const icon = document.getElementById('introAudioIcon');
             const label = document.getElementById('introAudioLabel');
