@@ -3136,38 +3136,9 @@
         }
 
       // =========================================================
-        // 1. WALLPAPER DINÁMICO + INTRO ACTIVADA POR BOTÓN [   ] CON AUDIO
+        // 1. WALLPAPER + PANTALLA BLANCA + INTRO CON SONIDO Y SALIDA
         // =========================================================
-        function initDynamicWallpaperAndIntro() {
-            const savedCustomWp = localStorage.getItem('blank_custom_wallpaper');
-            if (savedCustomWp) {
-                setWallpaperCssUrl(savedCustomWp);
-            } else {
-                probeImageExists('./wallpaper.jpg?v=' + Date.now(), (existsJpg) => {
-                    if (existsJpg) {
-                        setWallpaperCssUrl('./wallpaper.jpg?v=' + Date.now());
-                    } else {
-                        probeImageExists('./wallpaper.png?v=' + Date.now(), (existsPng) => {
-                            if (existsPng) {
-                                setWallpaperCssUrl('./wallpaper.png?v=' + Date.now());
-                            } else {
-                                setWallpaperCssUrl(DEFAULT_DEMO_WALLPAPER);
-                            }
-                        });
-                    }
-                });
-            }
-
-            const introVid = document.getElementById('introCustomVideo');
-            if (!introVid) return;
-
-            // Dejamos el video en pausa y en el fotograma 0 hasta que el usuario presione [ ]
-            introVid.pause();
-            introVid.currentTime = 0;
-
-            // Cuando el video termine por completo, entra a la web principal
-            introVid.onended = function() {
-            let hasEnteredMainSite = false;
+        let hasEnteredMainSite = false;
 
         function enterGrimoireExperience() {
             if (hasEnteredMainSite) return;
@@ -3191,25 +3162,50 @@
             }
         }
 
+        function initDynamicWallpaperAndIntro() {
+            const savedCustomWp = localStorage.getItem('blank_custom_wallpaper');
+            if (savedCustomWp) {
+                setWallpaperCssUrl(savedCustomWp);
+            } else {
+                probeImageExists('./wallpaper.jpg?v=' + Date.now(), (existsJpg) => {
+                    if (existsJpg) {
+                        setWallpaperCssUrl('./wallpaper.jpg?v=' + Date.now());
+                    } else {
+                        probeImageExists('./wallpaper.png?v=' + Date.now(), (existsPng) => {
+                            if (existsPng) {
+                                setWallpaperCssUrl('./wallpaper.png?v=' + Date.now());
+                            } else {
+                                setWallpaperCssUrl(DEFAULT_DEMO_WALLPAPER);
+                            }
+                        });
+                    }
+                });
+            }
+
+            const introVid = document.getElementById('introCustomVideo');
+            if (introVid) {
+                introVid.pause();
+                introVid.currentTime = 0;
+                introVid.onended = () => enterGrimoireExperience();
+            }
+        }
+
         function startBlankIntroWithSound() {
             const gate = document.getElementById('whiteGateScreen');
             const introVid = document.getElementById('introCustomVideo');
             const audioHint = document.getElementById('introAudioHint');
 
-            // 1. Oscurecer la pantalla blanca hacia el negro del reproductor
             if (gate) {
                 gate.style.opacity = '0';
                 gate.style.pointerEvents = 'none';
                 setTimeout(() => gate.classList.add('hidden'), 700);
             }
 
-            // 2. Arrancar el video con sonido activado al 100% y salida automática al terminar
             if (introVid) {
                 introVid.currentTime = 0;
                 introVid.muted = false;
                 introVid.volume = 1.0;
 
-                // Doble seguro de salida: por evento ended Y por tiempo restante
                 introVid.onended = () => enterGrimoireExperience();
                 introVid.ontimeupdate = () => {
                     if (introVid.duration > 0 && (introVid.duration - introVid.currentTime) <= 0.15) {
@@ -3223,7 +3219,6 @@
                         if (audioHint) audioHint.classList.remove('hidden');
                         updateIntroAudioUI(false);
                     }).catch(() => {
-                        // Respaldo por si el navegador bloquea el audio
                         introVid.muted = true;
                         introVid.play();
                         if (audioHint) audioHint.classList.remove('hidden');
@@ -3232,6 +3227,7 @@
                 }
             }
         }
+
         function updateIntroAudioUI(isMuted) {
             const icon = document.getElementById('introAudioIcon');
             const label = document.getElementById('introAudioLabel');
