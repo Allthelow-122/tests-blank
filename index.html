@@ -773,20 +773,35 @@
     <div id="dynamicWallpaperLayer"></div>
     <div class="renaissance-halftone-overlay"></div>
 
-    <!-- 2. RENAISSANCE MULTIMEDIA INTRO OVERLAY (CONECTADO DIRECTO A TU URL) -->
-    <div id="renaissanceIntroModal" onclick="unlockIntroAudio()">
+    <!-- 2. PANTALLA DE ENTRADA BLANCA + INTRO MULTIMEDIA CON SONIDO -->
+    <div id="renaissanceIntroModal" class="fixed inset-0 z-[100] bg-black overflow-hidden">
+        
+        <!-- CAPA 1: PANTALLA BLANCO PURO CON BOTÓN [          ] ABAJO AL CENTRO -->
+        <div id="whiteGateScreen" 
+             class="absolute inset-0 z-40 bg-white flex flex-col justify-end items-center pb-14 sm:pb-20 transition-opacity duration-700">
+            <button onclick="startBlankIntroWithSound()" 
+                    aria-label="Entrar a BLANK"
+                    class="group font-mono text-black text-xl sm:text-2xl font-bold tracking-[0.25em] px-8 py-4 bg-white border border-transparent hover:border-black/20 transition-all duration-300 cursor-pointer select-none active:scale-95">
+                <span class="inline-block transition-transform duration-300 group-hover:-translate-x-1.5">[</span>
+                <span class="inline-block px-4 text-xs tracking-[0.35em] text-black/0 group-hover:text-black/80 transition-colors duration-300 uppercase">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span class="inline-block transition-transform duration-300 group-hover:translate-x-1.5">]</span>
+            </button>
+        </div>
+
+        <!-- CAPA 2: VIDEO DE INTRO (ARRANCA CON VOLUMEN AL DAR CLIC EN [ ]) -->
         <video id="introCustomVideo" 
-               src="https://allthelow-122.github.io/tests-blank/intro.mp4" 
-               class=" inset-0 w-full h-full object-contain bg-black z-20" 
-               autoplay 
-               muted 
+               src="./intro.mp4" 
+               class="absolute inset-0 w-full h-full object-contain bg-black z-20" 
                playsinline 
                preload="auto">
         </video>
 
-        <!-- Indicador sutil para activar el sonido con 1 clic -->
-        <div id="introAudioHint" class="absolute bottom-6 right-6 z-30 font-mono text-[10px] tracking-[0.25em] uppercase text-white/80 bg-black/80 px-3.5 py-2 border border-white/30 backdrop-blur-sm pointer-events-none transition-opacity duration-500">
-            <i class="fa-solid fa-volume-xmark mr-1.5"></i> CLIC EN PANTALLA PARA SONIDO
+        <!-- BOTÓN DISCRETO PARA MUTEAR / DESMUTEAR DURANTE EL VIDEO -->
+        <div id="introAudioHint" 
+             onclick="event.stopPropagation(); toggleIntroAudio();" 
+             class="hidden absolute bottom-6 right-6 z-30 font-mono text-[10px] tracking-[0.25em] uppercase text-white/85 bg-black/80 px-3.5 py-2 border border-white/30 hover:bg-white hover:text-black transition-all cursor-pointer select-none">
+            <i id="introAudioIcon" class="fa-solid fa-volume-high mr-1.5 text-grimoire-gold"></i> 
+            <span id="introAudioLabel">SONIDO ACTIVO</span>
         </div>
     </div>
 
@@ -3117,20 +3132,20 @@
         }
 
       // =========================================================
-        // 1. WALLPAPER DINÁMICO E INTRO DIRECTA HASTA EL FINAL
+        // 1. WALLPAPER DINÁMICO + INTRO ACTIVADA POR BOTÓN [   ] CON AUDIO
         // =========================================================
         function initDynamicWallpaperAndIntro() {
             const savedCustomWp = localStorage.getItem('blank_custom_wallpaper');
             if (savedCustomWp) {
                 setWallpaperCssUrl(savedCustomWp);
             } else {
-                probeImageExists('https://allthelow-122.github.io/tests-blank/wallpaper.jpg?v=' + Date.now(), (existsJpg) => {
+                probeImageExists('./wallpaper.jpg?v=' + Date.now(), (existsJpg) => {
                     if (existsJpg) {
-                        setWallpaperCssUrl('https://allthelow-122.github.io/tests-blank/wallpaper.jpg?v=' + Date.now());
+                        setWallpaperCssUrl('./wallpaper.jpg?v=' + Date.now());
                     } else {
-                        probeImageExists('https://allthelow-122.github.io/tests-blank/wallpaper.png?v=' + Date.now(), (existsPng) => {
+                        probeImageExists('./wallpaper.png?v=' + Date.now(), (existsPng) => {
                             if (existsPng) {
-                                setWallpaperCssUrl('https://allthelow-122.github.io/tests-blank/wallpaper.png?v=' + Date.now());
+                                setWallpaperCssUrl('./wallpaper.png?v=' + Date.now());
                             } else {
                                 setWallpaperCssUrl(DEFAULT_DEMO_WALLPAPER);
                             }
@@ -3142,94 +3157,71 @@
             const introVid = document.getElementById('introCustomVideo');
             if (!introVid) return;
 
-            introVid.muted = true;
+            // Dejamos el video en pausa y en el fotograma 0 hasta que el usuario presione [ ]
+            introVid.pause();
+            introVid.currentTime = 0;
 
-            // ÚNICA CONDICIÓN DE SALIDA: Cuando el video termina por completo, se abre la página
+            // Cuando el video termine por completo, entra a la web principal
             introVid.onended = function() {
                 enterGrimoireExperience();
             };
-
-            // Forzar inicio de reproducción
-            introVid.play().catch((err) => {
-                console.warn('Esperando clic del usuario para reproducir:', err);
-            });
         }
 
-        function probeImageExists(url, callback) {
-            const img = new Image();
-            img.onload = () => callback(true);
-            img.onerror = () => callback(false);
-            img.src = url;
-        }
+        function startBlankIntroWithSound() {
+            const gate = document.getElementById('whiteGateScreen');
+            const introVid = document.getElementById('introCustomVideo');
+            const audioHint = document.getElementById('introAudioHint');
 
-        function setWallpaperCssUrl(url) {
-            document.documentElement.style.setProperty('--wallpaper-url', `url('${url}')`);
-        }
-
-        function toggleWallpaperModal(show) {
-            const modal = document.getElementById('wallpaperModal');
-            if (!modal) return;
-            if (show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
-        }
-
-        function applyCustomWallpaper() {
-            const input = document.getElementById('customWallpaperInput');
-            const val = (input?.value || '').trim();
-            if (!val) {
-                showToast('INGRESA UNA URL DE IMAGEN VÁLIDA');
-                return;
+            // 1. Oscurecer la pantalla blanca hacia el negro del reproductor
+            if (gate) {
+                gate.style.opacity = '0';
+                gate.style.pointerEvents = 'none';
+                setTimeout(() => gate.classList.add('hidden'), 700);
             }
-            localStorage.setItem('blank_custom_wallpaper', val);
-            setWallpaperCssUrl(val);
-            toggleWallpaperModal(false);
-            showToast('WALLPAPER ACTUALIZADO CORRECTAMENTE');
-        }
 
-        function resetDefaultWallpaper() {
-            localStorage.removeItem('blank_custom_wallpaper');
-            setWallpaperCssUrl(DEFAULT_DEMO_WALLPAPER);
-            const input = document.getElementById('customWallpaperInput');
-            if (input) input.value = '';
-            toggleWallpaperModal(false);
-            showToast('WALLPAPER DE DEMO RESTAURADO');
-        }
+            // 2. Arrancar el video desde 0 con el sonido activado al 100%
+            if (introVid) {
+                introVid.currentTime = 0;
+                introVid.muted = false;
+                introVid.volume = 1.0;
 
-        function updateWallpaperOpacity(val) {
-            const layer = document.getElementById('dynamicWallpaperLayer');
-            const label = document.getElementById('wpOpacityVal');
-            if (layer) layer.style.opacity = (val / 100).toFixed(2);
-            if (label) label.innerText = `${val}%`;
-        }
-
-        // --- INTRO MODAL CONTROLS ---
-        function enterGrimoireExperience() {
-            const modal = document.getElementById('renaissanceIntroModal');
-            const vid = document.getElementById('introCustomVideo');
-            if (modal) modal.classList.add('intro-hidden');
-            if (vid) vid.pause();
-            sessionStorage.setItem('blank_intro_seen', 'true');
-        }
-
-        function replayIntroModal() {
-            const modal = document.getElementById('renaissanceIntroModal');
-            const vid = document.getElementById('introCustomVideo');
-            if (modal) modal.classList.remove('intro-hidden');
-            if (vid && vid.src) vid.play().catch(() => {});
-        }
-
-        function toggleIntroSound() {
-            const vid = document.getElementById('introCustomVideo');
-            const btn = document.getElementById('introSoundBtn');
-            if (!vid) return;
-            vid.muted = !vid.muted;
-            if (btn) {
-                btn.innerHTML = vid.muted
-                    ? '<i class="fa-solid fa-volume-xmark mr-1"></i> AUDIO OFF'
-                    : '<i class="fa-solid fa-volume-high mr-1"></i> AUDIO ON';
+                const playPromise = introVid.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        if (audioHint) audioHint.classList.remove('hidden');
+                        updateIntroAudioUI(false);
+                    }).catch(() => {
+                        // Respaldo extremo por si algún navegador estricto bloquea audio
+                        introVid.muted = true;
+                        introVid.play();
+                        if (audioHint) audioHint.classList.remove('hidden');
+                        updateIntroAudioUI(true);
+                    });
+                }
             }
         }
 
+        function updateIntroAudioUI(isMuted) {
+            const icon = document.getElementById('introAudioIcon');
+            const label = document.getElementById('introAudioLabel');
+            if (icon) {
+                icon.className = isMuted ? 'fa-solid fa-volume-xmark mr-1.5' : 'fa-solid fa-volume-high mr-1.5 text-grimoire-gold';
+            }
+            if (label) {
+                label.innerText = isMuted ? 'ACTIVAR SONIDO' : 'SONIDO ACTIVO';
+            }
+        }
+
+        function toggleIntroAudio() {
+            const introVid = document.getElementById('introCustomVideo');
+            if (!introVid) return;
+            introVid.muted = !introVid.muted;
+            if (!introVid.muted) {
+                introVid.volume = 1.0;
+                introVid.play().catch(() => {});
+            }
+            updateIntroAudioUI(introVid.muted);
+        }
         // --- LIVE TITLE FONT SWITCHER ---
         function cycleTitleFont() {
             const body = document.body;
