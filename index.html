@@ -3111,8 +3111,8 @@
         const DEFAULT_DEMO_WALLPAPER = 'https://i.pinimg.com/736x/7a/29/b1/7a29b1330b07f985b330a1a2d89449bc.jpg';
 
         // Official Discord Webhook for Tryouts Secretary
-        const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1570222925158682787/4G_6JKB0l5xE29bKPNXxeY9DoeW-7whRjEE3hTwEUbJiXMymJ6QK4tFw2wTEEe9WEOLx';
-
+        const DISCORD_TRYOUTS_WEBHOOK_URL = "https://discord.com/api/webhooks/1565143360660840562/rpCcEEw2284HucOGU2_osZsnYa3QgBPCurfmNGF6oqcIPJLFz2cgTjhEh3PYa9Wz5VA9";
+        const DISCORD_SCRIMS_WEBHOOK_URL = "https://discord.com/api/webhooks/1570222925158682787/4G_6JKB0l5xE29bKPNXxeY9DoeW-7whRjEE3hTwEUbJiXMymJ6QK4tFw2wTEEe9WEOLx";
         const fontModes = [
             { class: '', label: 'BODONI' },
             { class: 'font-mode-tenor', label: 'CINZEL' },
@@ -3597,7 +3597,7 @@
 
             let webhookSuccess = false;
             try {
-                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                const response = await fetch(DISCORD_TRYOUTS_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(discordPayload)
@@ -4827,7 +4827,7 @@ async function processPlayer(p) {
                 };
 
                 try {
-                    await fetch(DISCORD_WEBHOOK_URL, {
+                    await fetch(DISCORD_SCRIMS_WEBHOOK_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
